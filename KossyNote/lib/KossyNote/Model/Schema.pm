@@ -3,7 +3,6 @@ use strict;
 use warnings;
 use Teng::Schema::Declare;
 use DateTime;
-use DateTime::Format::Strptime;
 use DateTime::Format::MySQL;
 
 table {

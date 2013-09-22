@@ -3,14 +3,12 @@
 
 <h1><: $c.stash.site_name :></h1>
 
-<div id="ks-notes"></div>
-
 <hr>
 
-<form id="create-form" method="post" action="<: $c.req.uri_for('/create') :>">
+<form id="create-form" method="post" action="#">
 	<fieldset>
 		<div class="clearfix">
-			<textarea class="span9" name="text" rows="10"></textarea>
+			<textarea class="col-md-8" name="text" rows="3"></textarea>
 			<span class="help-block">write something</span>
 		</div>
 		<div class="actions">
@@ -20,6 +18,8 @@
 </form>
 
 <hr>
+
+<div id="ks-notes" class="clearfix"></div>
 
 <textarea id="debug" class="span6" rows="10"></textarea>
 

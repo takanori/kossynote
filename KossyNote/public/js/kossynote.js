@@ -1,35 +1,14 @@
-// $(function() {
-	// $('#create-form').submit(function() {
-		// createForm = this;
-		// $.ajax({
-			// type: 'POST',
-			// url: createForm.action,
-			// data: $(createForm).serialize(),
-			// success: function(data) {
-				// location.href = data.location;
-			// },
-			// error: function() {
-				// alert('error');
-			// },
-			// dataType: 'json',
-		// });
-		// return false;
-	// });
-// });
-
 $(document).ready(function() {
 
 	var ksNotes = $('#ks-notes');
 
 	ksNotes.addClass('ks-notes');
 	ksNotes.append(
-		'<input type="text" class="ks-input">' +
 		'<table class="table table-striped">' +
 		'	<thead><tr><th class="col-md-10">text</th><th class="col-md-1">created_on</th><th class="col-md-1">buttons</th></tr></thead>' +
 		'	<tbody class="ks-list"></tbody>'
 	);
 
-	var ksInput = ksNotes.children('.ks-input');
 	var ksList = ksNotes.find('.ks-list');
 
 	var rawNotes = [];
@@ -93,8 +72,8 @@ $(document).ready(function() {
 		textBeforeEdit = noteText;
 		textTd.text('');
 
-		$('<input type="text" class="ks-row-input value="' + htmlEscape(noteText).replace(/\"/g, /*"*/ '&quot;') + '">').appendTo(textTd).keypress(function(e) {
 
+		$('<textarea class="col-md-6 ks-row-input" rows="4">' + htmlEscape(noteText).replace(/\"/g, /*"*/ '&quot;') + '</textarea>').appendTo(textTd).keypress(function(e) {
 			if (e.keyCode != 13)
 				return;
 
