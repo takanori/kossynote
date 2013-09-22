@@ -1,0 +1,4 @@
+require 'Kossy', '0.19';
+require 'DBI', '1.628';
+require 'DBD::mysql', '4.024';
+

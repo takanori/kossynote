@@ -1,0 +1,23 @@
+# Kossy
+cover_db
+META.yml
+Makefile
+blib
+inc
+pm_to_blib
+MANIFEST
+Makefile.old
+nytprof.out
+MANIFEST.bak
+
+# Carton
+local/
+
+# Vim
+*.sw[po]
+*~
+
+# Others
+*.tar.gz
+.DS_Store
+MYMETA.*

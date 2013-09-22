@@ -1,0 +1,27 @@
+: cascade base
+: around content -> {
+
+<h1><: $c.stash.site_name :></h1>
+
+<div id="ks-notes"></div>
+
+<hr>
+
+<form id="create-form" method="post" action="<: $c.req.uri_for('/create') :>">
+	<fieldset>
+		<div class="clearfix">
+			<textarea class="span9" name="text" rows="10"></textarea>
+			<span class="help-block">write something</span>
+		</div>
+		<div class="actions">
+			<input type="button" id="ks-create" class="btn primary" value="Submit">
+		</div>
+	</fieldset>
+</form>
+
+<hr>
+
+<textarea id="debug" class="span6" rows="10"></textarea>
+
+: }
+
