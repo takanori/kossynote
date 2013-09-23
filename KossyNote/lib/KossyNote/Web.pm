@@ -89,8 +89,8 @@ sub db {
 	if (!defined($self->{_db})) {
 		$self->{_db} = KossyNote::Model->new(connect_info => [
 			'dbi:mysql:kossynote',
-			'webapp',
-			'Wepa',
+			'YourUserName',
+			'YourPassword',
 			{ mysql_enable_utf8 => 1 },
 		]);
 	}

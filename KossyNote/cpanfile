@@ -1,4 +1,7 @@
-require 'Kossy', '0.19';
-require 'DBI', '1.628';
-require 'DBD::mysql', '4.024';
-
+requires 'Kossy', '0.19';
+requires 'DBI', '1.628';
+requires 'DBD::mysql', '4.024';
+requires 'DateTime', '1.03';
+requires 'FindBin', '1.51';
+requires 'Teng', '0.20';
+requires 'DateTime::Format::MySQL', '0.04';
