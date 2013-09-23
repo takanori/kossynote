@@ -41,7 +41,7 @@ $(document).ready(function() {
 			steps: [
 				{
 					element: document.querySelectorAll('.ks-row')[0].querySelector('td'),
-					intro: 'Double click here to update the text.<br>Tap Enter to submit.',
+					intro: 'Double click here to update the text.',
 				},
 				{
 					element: document.querySelectorAll('.delete-btn')[0],
@@ -60,9 +60,9 @@ $(document).ready(function() {
 	}
 
 	// create 
+	var textInput = createForm.find('.text-input');
 	$('#ks-create').on('click', function() {
-		var text = createForm.find('.text-input').val();
-		if (!text)
+		if (!textInput.val())
 			return;
 
 		addNewNote(createForm.serialize());
@@ -77,6 +77,7 @@ $(document).ready(function() {
 				if (savedData) {
 					rawNotes.unshift(savedData);
 					refreshNoteList(rawNotes);
+					textInput.val("");
 				} else {
 					// debugPrint('Error adding note.');
 				}
@@ -106,7 +107,7 @@ $(document).ready(function() {
 		var updateTextArea = $('<textarea class="col-xs-12 ks-row-input" rows="4">' + htmlEscape(noteText).replace(/\"/g, /*"*/ '&quot;') + '</textarea>');
 		updateTextArea.appendTo(textTd).focus();
 	
-		var submitBtn = $('<input type="button" class="update-btn btn btn-primary btn-xs" name="submit-update" value="submit">').on('click', function() {
+		var submitBtn = $('<input type="button" class="update-btn btn btn-primary btn-xs" name="submit-update" value="Submit">').on('click', function() {
 
 			// Update note
 			var ksRowInput = $(this).siblings('.ks-row-input');
