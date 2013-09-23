@@ -1,15 +1,14 @@
 : cascade base
 : around content -> {
 
-<h1><: $c.stash.site_name :></h1>
-
 <form id="create-form" method="post" action="#">
 	<fieldset>
 		<div class="clearfix">
 			<textarea class="text-input col-xs-12" name="text" rows="3" placeholder="Write your texts here"></textarea><br>
 		</div>
 		<div class="actions">
-			<input type="button" id="ks-create" class="btn primary" value="Submit">
+			<input type="button" id="ks-create" class="btn btn-primary" value="Submit">
+			<input type="button" id="ks-help" class="btn btn-default" value="Help">
 		</div>
 	</fieldset>
 </form>
@@ -18,7 +17,7 @@
 
 <div id="ks-notes" class="clearfix"></div>
 
-<textarea id="debug" class="span6" rows="10"></textarea>
+<!-- <textarea id="debug" class="span6" rows="10"></textarea> -->
 
 : }
 

@@ -102,8 +102,8 @@ $(document).ready(function() {
 	});
 
 	// delete
-	$(ksList).on('click', '.delete-button', function() {
-		// debugPrint('delete-button clicked');
+	$(ksList).on('click', '.delete-btn', function() {
+		// debugPrint('delete-btn clicked');
 		var noteId = $(this).parent().parent().attr('id');
 		deleteNote(noteId);
 	});
@@ -152,7 +152,7 @@ $(document).ready(function() {
 			str += '<tr id="' + notes[i].note_id + '" class="ks-row">';
 			str += '<td>' + htmlEscape(notes[i].text) + '</td>';
 			str += '<td><small class="text-muted">' + htmlEscape(notes[i].created_on) + '</small></td>';
-			str += '<td><span class="delete-button"><i class="icon-remove-sign"></i></span></td></tr>';
+			str += '<td><span class="delete-btn"><i class="icon-remove-sign"></i></span></td></tr>';
 
 			ksList.append(str);
 		}
