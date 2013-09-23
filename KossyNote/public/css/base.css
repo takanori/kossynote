@@ -5,3 +5,8 @@ body {
 .delete-button {
 	cursor: pointer;
 }
+
+.text-input {
+	margin: 10px 0px 10px 0px;
+	resize: vertical;
+}

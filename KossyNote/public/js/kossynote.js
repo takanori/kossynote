@@ -5,8 +5,8 @@ $(document).ready(function() {
 	ksNotes.addClass('ks-notes');
 	ksNotes.append(
 		'<table class="table table-striped">' +
-		'	<thead><tr><th class="col-md-10">text</th><th class="col-md-1">created_on</th><th class="col-md-1">buttons</th></tr></thead>' +
-		'	<tbody class="ks-list"></tbody>'
+		'<thead><tr><th class="col-md-9">text</th><th class="col-md-2">created_on</th><th class="col-md-1"></th></tr></thead>' +
+		'<tbody class="ks-list"></tbody></table>'
 	);
 
 	var ksList = ksNotes.find('.ks-list');
@@ -22,15 +22,17 @@ $(document).ready(function() {
 				rawNotes = data;
 				refreshNoteList(rawNotes);
 			} else {
-				debugPrint('Error searching notes.');
+				// debugPrint('Error searching notes.');
 			}
 		}
 	});
 
 	// create 
 	$('#ks-create').on('click', function() {
-		debugPrint('submit clicked');
-	
+		var text = createForm.find('.text-input').val();
+		if (!text)
+			return;
+
 		addNewNote(createForm.serialize());
 	});
 
@@ -44,7 +46,7 @@ $(document).ready(function() {
 					rawNotes.unshift(savedData);
 					refreshNoteList(rawNotes);
 				} else {
-					debugPrint('Error adding note.');
+					// debugPrint('Error adding note.');
 				}
 			},
 			dataType: 'json',
@@ -54,7 +56,7 @@ $(document).ready(function() {
 	// update
 	var textBeforeEdit = '';
 	$(ksList).on('dblclick', '.ks-row', function() {
-		debugPrint('ks-row dblclicked');
+		// debugPrint('ks-row dblclicked');
 
 		var existingInput = $(ksList).find('.ks-row-input');
 		if (existingInput) {
@@ -66,14 +68,10 @@ $(document).ready(function() {
 		var textTd = $(this).children('td:first');
 		var noteText = textTd.text();
 
-		// if (!noteText)
-			// return;
-
 		textBeforeEdit = noteText;
 		textTd.text('');
 
-
-		$('<textarea class="col-md-6 ks-row-input" rows="4">' + htmlEscape(noteText).replace(/\"/g, /*"*/ '&quot;') + '</textarea>').appendTo(textTd).keypress(function(e) {
+		$('<textarea class="col-md-8 ks-row-input" rows="4">' + htmlEscape(noteText).replace(/\"/g, /*"*/ '&quot;') + '</textarea>').appendTo(textTd).keypress(function(e) {
 			if (e.keyCode != 13)
 				return;
 
@@ -105,7 +103,7 @@ $(document).ready(function() {
 
 	// delete
 	$(ksList).on('click', '.delete-button', function() {
-		debugPrint('delete-button clicked');
+		// debugPrint('delete-button clicked');
 		var noteId = $(this).parent().parent().attr('id');
 		deleteNote(noteId);
 	});
@@ -120,7 +118,7 @@ $(document).ready(function() {
 				note_id : noteId,
 			}, 
 			success: function(data) {
-				debugPrint("success in delete: " + data.note_id);
+				// debugPrint("success in delete: " + data.note_id);
 				deleteCache(data.note_id);
 				refreshNoteList(rawNotes);
 			},
@@ -146,14 +144,14 @@ $(document).ready(function() {
 	}
 
 	function refreshNoteList(notes) {
-		debugPrint('refreshNoteList notes.length: ' + notes.length);
+		// debugPrint('refreshNoteList notes.length: ' + notes.length);
 		
 		ksList.empty();
 		for (var i = 0; i < notes.length; i++) {
 			var str = '';
 			str += '<tr id="' + notes[i].note_id + '" class="ks-row">';
 			str += '<td>' + htmlEscape(notes[i].text) + '</td>';
-			str += '<td>' + htmlEscape(notes[i].created_on) + '</td>';
+			str += '<td><small class="text-muted">' + htmlEscape(notes[i].created_on) + '</small></td>';
 			str += '<td><span class="delete-button"><i class="icon-remove-sign"></i></span></td></tr>';
 
 			ksList.append(str);
@@ -168,11 +166,13 @@ $(document).ready(function() {
 
 	//====== Debug =============================================================//
 
+	/*
 	function debugPrint(str) {
 		var	area = $('#debug');
 		if (!area) return;
 		area.val(area.val() + str + '\n');
 	}
+	*/
 
 	//===========================================================================//
 });

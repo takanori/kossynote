@@ -3,13 +3,10 @@
 
 <h1><: $c.stash.site_name :></h1>
 
-<hr>
-
 <form id="create-form" method="post" action="#">
 	<fieldset>
 		<div class="clearfix">
-			<textarea class="col-md-8" name="text" rows="3"></textarea>
-			<span class="help-block">write something</span>
+			<textarea class="text-input col-xs-12" name="text" rows="3" placeholder="Write your texts here"></textarea><br>
 		</div>
 		<div class="actions">
 			<input type="button" id="ks-create" class="btn primary" value="Submit">
