@@ -1,9 +1,13 @@
 body {
-	padding: 50px 0px 20px 0px;
+	padding: 50px 5px 20px 5px;
 }
 
 .delete-btn {
 	cursor: pointer;
+}
+
+.update-btn {
+	margin: 5px 0px 0px 0px;
 }
 
 .text-input {

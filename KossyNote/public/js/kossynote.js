@@ -27,6 +27,38 @@ $(document).ready(function() {
 		}
 	});
 
+	// help
+	var ksHelp = $('#ks-help');
+	ksHelp.bind('click', function() {
+		startIntro();
+	});
+
+	var intro;
+	function startIntro(step) {
+		intro = introJs();
+
+		intro.setOptions({
+			steps: [
+				{
+					element: document.querySelectorAll('.ks-row')[0].querySelector('td'),
+					intro: 'Double click here to update the text.<br>Tap Enter to submit.',
+				},
+				{
+					element: document.querySelectorAll('.delete-btn')[0],
+					intro: 'Click this button to delete the entry',
+					position: 'left',
+				},
+			]
+		});
+
+		intro.onexit(function() {
+			intro = null;
+		});
+
+		intro.start();
+		return intro;
+	}
+
 	// create 
 	$('#ks-create').on('click', function() {
 		var text = createForm.find('.text-input').val();
@@ -71,12 +103,13 @@ $(document).ready(function() {
 		textBeforeEdit = noteText;
 		textTd.text('');
 
-		$('<textarea class="col-md-8 ks-row-input" rows="4">' + htmlEscape(noteText).replace(/\"/g, /*"*/ '&quot;') + '</textarea>').appendTo(textTd).keypress(function(e) {
-			if (e.keyCode != 13)
-				return;
+		var updateTextArea = $('<textarea class="col-xs-12 ks-row-input" rows="4">' + htmlEscape(noteText).replace(/\"/g, /*"*/ '&quot;') + '</textarea>');
+		updateTextArea.appendTo(textTd).focus();
+	
+		var submitBtn = $('<input type="button" class="update-btn btn btn-primary btn-xs" name="submit-update" value="submit">').on('click', function() {
 
 			// Update note
-			var ksRowInput = $(this);
+			var ksRowInput = $(this).siblings('.ks-row-input');
 			var newText = ksRowInput.val();
 
 			if (!newText)
@@ -98,7 +131,16 @@ $(document).ready(function() {
 			});
 			
 			ksRowInput.val('');
-		}).focus();
+
+			if (intro) {
+				intro.exit();
+			}
+		});
+		updateTextArea.after(submitBtn);
+
+		if (intro) {
+			intro.refresh();
+		}
 	});
 
 	// delete
@@ -106,6 +148,10 @@ $(document).ready(function() {
 		// debugPrint('delete-btn clicked');
 		var noteId = $(this).parent().parent().attr('id');
 		deleteNote(noteId);
+
+		if (intro) {
+			intro.exit();
+		}
 	});
 
 	function deleteNote(noteId) {
@@ -155,6 +201,12 @@ $(document).ready(function() {
 			str += '<td><span class="delete-btn"><i class="icon-remove-sign"></i></span></td></tr>';
 
 			ksList.append(str);
+		}
+
+		if (notes.length === 0) {
+			ksHelp.hide();
+		} else if (ksHelp.is(':hidden')) {
+			ksHelp.show();
 		}
 	}
 

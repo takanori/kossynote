@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="<: $c.req.uri_for('/css/bootstrap.min.css') :>">
 <link rel="stylesheet" href="<: $c.req.uri_for('/css/font-awesome/css/font-awesome.min.css') :>">
 <link rel="stylesheet" href="<: $c.req.uri_for('/css/base.css') :>">
+<link rel="stylesheet" href="<: $c.req.uri_for('/css/introjs.css') :>">
 </head>
 <body>
 
@@ -40,7 +41,8 @@
 
 <script type="text/javascript" src="<: $c.req.uri_for('/js/jquery.min.js') :>"></script>
 <script type="text/javascript" src="<: $c.req.uri_for('/js/bootstrap.min.js') :>" defer></script>
-<script type="text/javascript" src="<: $c.req.uri_for('/js/kossynote.js') :>" defer></script>
+<script type="text/javascript" src="<: $c.req.uri_for('/js/kossynote.js') :>"></script>
+<script type="text/javascript" src="<: $c.req.uri_for('/js/intro.js') :>"></script>
 </body>
 </html>
 

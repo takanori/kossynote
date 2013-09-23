@@ -6,9 +6,9 @@
 		<div class="clearfix">
 			<textarea class="text-input col-xs-12" name="text" rows="3" placeholder="Write your texts here"></textarea><br>
 		</div>
-		<div class="actions">
+		<div id class="actions">
 			<input type="button" id="ks-create" class="btn btn-primary" value="Submit">
-			<input type="button" id="ks-help" class="btn btn-default" value="Help">
+			<input type="button" id="ks-help" class="btn btn-default" value="Help" style="display: none;">
 		</div>
 	</fieldset>
 </form>
@@ -18,6 +18,5 @@
 <div id="ks-notes" class="clearfix"></div>
 
 <!-- <textarea id="debug" class="span6" rows="10"></textarea> -->
-
 : }
 
