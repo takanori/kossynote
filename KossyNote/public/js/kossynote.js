@@ -5,12 +5,11 @@ $(document).ready(function() {
 	ksNotes.addClass('ks-notes');
 	ksNotes.append(
 		'<table class="table table-striped">' +
-		'<thead><tr><th class="col-md-9">text</th><th class="col-md-2">created_on</th><th class="col-md-1"></th></tr></thead>' +
+		'<thead><tr><th class="col-md-9">text</th><th class="col-md-2">created_at</th><th class="col-md-1"></th></tr></thead>' +
 		'<tbody class="ks-list"></tbody></table>'
 	);
 
 	var ksList = ksNotes.find('.ks-list');
-
 	var rawNotes = [];
 	var createForm = $('#create-form');
 
@@ -18,8 +17,8 @@ $(document).ready(function() {
 		type: 'GET',
 		url: '/search',
 		success: function(data) {
-			if (data) {
-				rawNotes = data;
+			if (data.notes) {
+				rawNotes = data.notes;
 				refreshNoteList(rawNotes);
 			} else {
 				// debugPrint('Error searching notes.');
@@ -27,7 +26,8 @@ $(document).ready(function() {
 		}
 	});
 
-	// help
+	// intro =========================================================================
+
 	var ksHelp = $('#ks-help');
 	ksHelp.bind('click', function() {
 		startIntro();
@@ -59,13 +59,29 @@ $(document).ready(function() {
 		return intro;
 	}
 
-	// create 
+	// error messages =======================================================================
+
+	var ksError = $('#error-messages');
+	function refreshErrorMessages(messages) {
+		ksError.empty();
+		for (var i = 0; i < messages.length; i++) {
+			ksError.append(
+				'<div class="alert alert-error">' +
+				'	<button type="button" class="close" data-dismiss="alert">x</button>' + messages[i] +
+				'</div>'
+			);
+		}
+	}
+
+	// create =======================================================================
+
 	var textInput = createForm.find('.text-input');
 	$('#ks-create').on('click', function() {
 		if (!textInput.val())
 			return;
 
 		addNewNote(createForm.serialize());
+		textInput.focus();
 	});
 
 	function addNewNote(noteData) {
@@ -73,20 +89,23 @@ $(document).ready(function() {
 			type: 'POST',
 			url: '/create',
 			data: noteData,
-			success: function(savedData) {
-				if (savedData) {
-					rawNotes.unshift(savedData);
+			success: function(data) {
+				if (data.error_messages) {
+					refreshErrorMessages(data.error_messages);
+					return;
+				}
+				if (data.note) {
+					rawNotes.unshift(data.note);
 					refreshNoteList(rawNotes);
 					textInput.val("");
-				} else {
-					// debugPrint('Error adding note.');
 				}
 			},
 			dataType: 'json',
 		});
 	}
 
-	// update
+	// update =======================================================================
+
 	var textBeforeEdit = '';
 	$(ksList).on('dblclick', '.ks-row', function() {
 		// debugPrint('ks-row dblclicked');
@@ -123,15 +142,20 @@ $(document).ready(function() {
 					note_id: noteId,
 					text: newText,
 				},
-				success: function(updatedNote) {
-					if (updatedNote) {
-						updateCache(updatedNote);
+				success: function(data) {
+					if (data.error_messages) {
+						refreshErrorMessages(data.error_messages);
+						return;
+					}
+					if (data.note) {
+						updateCache(data.note);
 						refreshNoteList(rawNotes);
 					}
 				},
 			});
 			
 			ksRowInput.val('');
+			textInput.focus();
 
 			if (intro) {
 				intro.exit();
@@ -144,7 +168,17 @@ $(document).ready(function() {
 		}
 	});
 
-	// delete
+	function updateCache(note) {
+		for (var i = 0; i < rawNotes.length; i++) {
+			if (rawNotes[i].note_id == note.note_id) {
+				rawNotes[i] = note;
+				break;
+			}
+		}
+	}
+
+	// delete =======================================================================
+
 	$(ksList).on('click', '.delete-btn', function() {
 		// debugPrint('delete-btn clicked');
 		var noteId = $(this).parent().parent().attr('id');
@@ -165,6 +199,10 @@ $(document).ready(function() {
 				note_id : noteId,
 			}, 
 			success: function(data) {
+				if (data.error_messages) {
+					refreshErrorMessages(data.error_messages);
+					return;
+				}
 				// debugPrint("success in delete: " + data.note_id);
 				deleteCache(data.note_id);
 				refreshNoteList(rawNotes);
@@ -181,14 +219,7 @@ $(document).ready(function() {
 		}
 	}
 
-	function updateCache(note) {
-		for (var i = 0; i < rawNotes.length; i++) {
-			if (rawNotes[i].note_id == note.note_id) {
-				rawNotes[i] = note;
-				break;
-			}
-		}
-	}
+	// helper ========================================================================
 
 	function refreshNoteList(notes) {
 		// debugPrint('refreshNoteList notes.length: ' + notes.length);
@@ -198,7 +229,7 @@ $(document).ready(function() {
 			var str = '';
 			str += '<tr id="' + notes[i].note_id + '" class="ks-row">';
 			str += '<td>' + htmlEscape(notes[i].text) + '</td>';
-			str += '<td><small class="text-muted">' + htmlEscape(notes[i].created_on) + '</small></td>';
+			str += '<td><small class="text-muted">' + htmlEscape(notes[i].created_at) + '</small></td>';
 			str += '<td><span class="delete-btn"><i class="icon-remove-sign"></i></span></td></tr>';
 
 			ksList.append(str);
@@ -217,7 +248,7 @@ $(document).ready(function() {
 	}	
 
 
-	//====== Debug =============================================================//
+	// debug ========================================================================
 
 	/*
 	function debugPrint(str) {
@@ -226,6 +257,4 @@ $(document).ready(function() {
 		area.val(area.val() + str + '\n');
 	}
 	*/
-
-	//===========================================================================//
 });

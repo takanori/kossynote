@@ -1,6 +1,8 @@
 : cascade base
 : around content -> {
 
+<div id="error-messages"></div>
+
 <form id="create-form" method="post" action="#">
 	<fieldset>
 		<div class="clearfix">

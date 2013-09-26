@@ -22,8 +22,7 @@ filter 'set_title' => sub {
 
 get '/' => [qw/set_title/] => sub {
 	my ( $self, $c )  = @_;
-	my $itr = $self->note_list;
-	$c->render('index.tx', { itr => $itr });
+	$c->render('index.tx', { });
 };
 
 post '/create' => sub {
@@ -37,21 +36,16 @@ post '/create' => sub {
 		]);
 	if ($result->has_error) {
 		my $error_messages = [$result->errors->{text}];
-		return $c->render_json({ error_messages => $error_messages });
+		return $c->render_json({error_messages => $error_messages});
 	}
-	my $row = $self->create_note($result->valid('text'));
-	$c->render_json(\%{$row->get_columns});
+	my $note = $self->create_note($result->valid('text'));
+	$c->render_json({note => $note});
 };
 
 get '/search' => sub {
 	my ($self, $c) = @_;
-	my $itr = $self->note_list;
-
-	my @rows;
-	while (my $row = $itr->next) {
-		push(@rows, $row->get_columns);
-	}
-	$c->render_json(\@rows);
+	my $notes = $self->note_list;
+	$c->render_json({notes => $notes});
 };
 
 post '/update' => sub {
@@ -68,8 +62,8 @@ post '/update' => sub {
 		return $c->render_json({ error_messages => $error_messages });
 	}
 
-	my $row = $self->update_note($c->req->param('note_id'), $result->valid('text'));
-	$c->render_json(\%{$row->get_columns});
+	my $note = $self->update_note($c->req->param('note_id'), $result->valid('text'));
+	$c->render_json({note => $note});
 };
 
 router 'DELETE' => '/delete' => sub {
@@ -77,9 +71,10 @@ router 'DELETE' => '/delete' => sub {
 	my $note_id = $c->req->param('note_id');
 	my $deleted_rows_count = $self->delete_note($note_id);
 	if ($deleted_rows_count != 1) {
-		# TODO
+		my $error_messages = ['$deleted_rows_count is ' . $deleted_rows_count];
+		return $c->render_json({note_id => $note_id, error_messages => $error_messages});
 	} else {
-		$c->render_json({note_id => $note_id});
+		return $c->render_json({note_id => $note_id});
 	}
 };
 
@@ -102,9 +97,9 @@ sub create_note {
 	$text = "" if !defined $text;
 	my $row = $self->db->insert('notes', {
 			text => $text,
-			created_on => $self->current_time,
+			created_at => $self->current_time,
 		});
-	return $row;
+	return \%{$row->get_columns};
 }
 
 sub note_list {
@@ -112,7 +107,12 @@ sub note_list {
 	my $itr = $self->db->search('notes', {}, {
 			order_by => {'note_id' => 'DESC'},
 		});
-	return $itr;
+
+	my @rows;
+	while (my $row = $itr->next) {
+		push(@rows, $row->get_columns);
+	}
+	return \@rows;
 }
 
 sub update_note {
@@ -130,7 +130,7 @@ sub update_note {
 	my $row = $db->single('notes', {
 			note_id => $note_id,
 		});
-	return $row;
+	return \%{$row->get_columns};
 }
 
 sub delete_note {

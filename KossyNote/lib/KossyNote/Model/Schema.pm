@@ -11,12 +11,12 @@ table {
 	columns qw(
 		note_id
 		text
-		created_on
+		created_at
 	);
-	inflate '^.+_on$' => sub {
+	inflate '^.+_at$' => sub {
 		DateTime::Format::MySQL->parse_datetime(shift);
 	};
-	deflate '^.+_on$' => sub {
+	deflate '^.+_at$' => sub {
 		DateTime::Format::MySQL->format_datetime(shift);
 	};
 };
