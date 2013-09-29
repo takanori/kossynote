@@ -5,3 +5,4 @@ requires 'DateTime', '1.03';
 requires 'FindBin', '1.51';
 requires 'Teng', '0.20';
 requires 'DateTime::Format::MySQL', '0.04';
+requires 'Task::Plack', '0.28';
